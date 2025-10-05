@@ -60,9 +60,16 @@ class StorageManager {
     get(key) {
         try {
             const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : null;
+            if (data === null || data === undefined || data === '') return null;
+            try {
+                return JSON.parse(data);
+            } catch (parseErr) {
+                // 非JSON数据，清理并返回空，避免控制台错误
+                localStorage.removeItem(key);
+                return null;
+            }
         } catch (error) {
-            console.error('读取本地存储失败:', error);
+            // 访问localStorage异常时静默返回
             return null;
         }
     }
@@ -77,7 +84,7 @@ class StorageManager {
             localStorage.setItem(key, JSON.stringify(value));
             return true;
         } catch (error) {
-            console.error('写入本地存储失败:', error);
+            console.error('ローカルストレージへの書き込みに失敗しました:', error);
             return false;
         }
     }
@@ -91,7 +98,7 @@ class StorageManager {
             localStorage.removeItem(key);
             return true;
         } catch (error) {
-            console.error('删除本地存储失败:', error);
+            console.error('ローカルストレージからの削除に失敗しました:', error);
             return false;
         }
     }
@@ -105,7 +112,7 @@ class StorageManager {
             this.initStorage(); // 重新初始化
             return true;
         } catch (error) {
-            console.error('清空本地存储失败:', error);
+            console.error('ローカルストレージのクリアに失敗しました:', error);
             return false;
         }
     }
@@ -315,7 +322,7 @@ class StorageManager {
             
             return true;
         } catch (error) {
-            console.error('恢复数据失败:', error);
+            console.error('データの復元に失敗しました:', error);
             return false;
         }
     }

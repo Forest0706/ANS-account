@@ -16,11 +16,11 @@ class ExpenseItemManager {
         
         // 支持的币种
         this.currencies = [
-            { code: 'CNY', name: '人民币', symbol: '¥' },
-            { code: 'USD', name: '美元', symbol: '$' },
-            { code: 'EUR', name: '欧元', symbol: '€' },
-            { code: 'JPY', name: '日元', symbol: '¥' },
-            { code: 'HKD', name: '港币', symbol: 'HK$' }
+            { code: 'CNY', name: '人民元', symbol: '¥' },
+            { code: 'USD', name: '米ドル', symbol: '$' },
+            { code: 'EUR', name: 'ユーロ', symbol: '€' },
+            { code: 'JPY', name: '円', symbol: '¥' },
+            { code: 'HKD', name: '香港ドル', symbol: 'HK$' }
         ];
 
         // 税区分
@@ -89,7 +89,7 @@ class ExpenseItemManager {
      * 显示新增模态框
      */
     showAddModal() {
-        const modal = this.createExpenseItemModal('新增费用项目', {});
+        const modal = this.createExpenseItemModal('費用項目新規作成', {});
         Components.showModal(modal);
     }
 
@@ -97,7 +97,7 @@ class ExpenseItemManager {
      * 显示编辑模态框
      */
     showEditModal(item) {
-        const modal = this.createExpenseItemModal('编辑费用项目', item);
+        const modal = this.createExpenseItemModal('費用項目編集', item);
         Components.showModal(modal);
     }
 
@@ -119,7 +119,7 @@ class ExpenseItemManager {
         // 代码（只读）
         const codeInput = Components.createFormInput({
             name: 'code',
-            label: '代码',
+            label: 'コード',
             value: newCode,
             required: true,
             disabled: true
@@ -128,26 +128,26 @@ class ExpenseItemManager {
         // 名称
         const nameInput = Components.createFormInput({
             name: 'name',
-            label: '费用项目名称',
+            label: '費用項目名',
             value: item.name || '',
-            placeholder: '请输入费用项目名称',
+            placeholder: '費用項目名を入力してください',
             required: true
         });
 
         // 分类
         const categorySelect = Components.createFormSelect({
             name: 'category',
-            label: '费用分类',
+            label: '費用分類',
             value: item.category || 'transport',
             options: [
-                { value: 'transport', text: '运输费' },
-                { value: 'storage', text: '仓储费' },
-                { value: 'handling', text: '装卸费' },
-                { value: 'packaging', text: '包装费' },
-                { value: 'insurance', text: '保险费' },
-                { value: 'customs', text: '报关费' },
-                { value: 'commission', text: '佣金' },
-                { value: 'other', text: '其他费用' }
+                { value: 'transport', text: '運送費' },
+                { value: 'storage', text: '倉庫料' },
+                { value: 'handling', text: '荷役費' },
+                { value: 'packaging', text: '包装費' },
+                { value: 'insurance', text: '保険料' },
+                { value: 'customs', text: '通関料' },
+                { value: 'commission', text: '手数料' },
+                { value: 'other', text: 'その他費用' }
             ],
             required: true
         });
@@ -157,17 +157,19 @@ class ExpenseItemManager {
             name: 'tax_type',
             label: '税区分',
             value: item.tax_type || 'taxable',
-            options: this.taxTypes.map(tax => ({
-                value: tax.value,
-                text: tax.text
-            })),
+            options: [
+                { value: 'taxable', text: '課税' },
+                { value: 'exempt', text: '免税' },
+                { value: 'zero_rate', text: '零税率' },
+                { value: 'reduced_rate', text: '軽減税率' }
+            ],
             required: true
         });
 
         // 默认币种
         const currencySelect = Components.createFormSelect({
             name: 'default_currency',
-            label: '默认币种',
+            label: 'デフォルト通貨',
             value: item.default_currency || 'CNY',
             options: this.currencies.map(currency => ({
                 value: currency.code,
@@ -179,37 +181,37 @@ class ExpenseItemManager {
         // 默认单价
         const defaultPriceInput = Components.createFormInput({
             name: 'default_price',
-            label: '默认单价',
+            label: 'デフォルト単価',
             value: item.default_price || '',
             type: 'number',
             step: '0.01',
-            placeholder: '请输入默认单价'
+            placeholder: 'デフォルト単価を入力してください'
         });
 
         // 计量单位
         const unitInput = Components.createFormInput({
             name: 'unit',
-            label: '计量单位',
+            label: '単位',
             value: item.unit || '',
-            placeholder: '如：吨、立方米、件等'
+            placeholder: '例：トン・立方メートル・件など'
         });
 
         // 备注
         const notesInput = Components.createFormTextarea({
             name: 'notes',
-            label: '备注',
+            label: '備考',
             value: item.notes || '',
-            placeholder: '请输入备注信息'
+            placeholder: '備考を入力してください'
         });
 
         // 状态
         const statusSelect = Components.createFormSelect({
             name: 'status',
-            label: '状态',
+            label: '状態',
             value: item.status || 'active',
             options: [
-                { value: 'active', text: '启用' },
-                { value: 'inactive', text: '停用' }
+                { value: 'active', text: '有効' },
+                { value: 'inactive', text: '無効' }
             ]
         });
 
@@ -228,7 +230,7 @@ class ExpenseItemManager {
                 type: 'button',
                 className: 'btn btn-secondary',
                 onclick: () => Components.closeModal(modal)
-            }, '取消'),
+            }, 'キャンセル'),
             Utils.dom.createElement('button', {
                 type: 'submit',
                 className: 'btn btn-primary',
@@ -285,7 +287,7 @@ class ExpenseItemManager {
 
         if (result) {
             Components.createToast({
-                message: isEdit ? '费用项目更新成功！' : '费用项目添加成功！',
+                message: isEdit ? '費用項目を更新しました！' : '費用項目を追加しました！',
                 type: 'success'
             });
             
@@ -294,7 +296,7 @@ class ExpenseItemManager {
             Components.closeModal(document.querySelector('.modal.active'));
         } else {
             Components.createToast({
-                message: '操作失败，请重试',
+                message: '操作に失敗しました。再試行してください',
                 type: 'error'
             });
         }
@@ -335,9 +337,9 @@ class ExpenseItemManager {
         if (!item) return;
 
         const confirmed = await Components.createConfirmDialog({
-            title: '删除确认',
-            message: `确定要删除费用项目 "${item.name}" 吗？`,
-            confirmText: '删除',
+            title: '削除確認',
+            message: `費用項目 "${item.name}" を削除してもよろしいですか？`,
+            confirmText: '削除',
             confirmClass: 'btn-danger'
         });
 
@@ -349,7 +351,7 @@ class ExpenseItemManager {
 
             if (success) {
                 Components.createToast({
-                    message: '费用项目删除成功！',
+                    message: '費用項目を削除しました！',
                     type: 'success'
                 });
                 
@@ -357,7 +359,7 @@ class ExpenseItemManager {
                 this.filterAndSort();
             } else {
                 Components.createToast({
-                    message: '删除失败，请重试',
+                    message: '削除に失敗しました。再試行してください',
                     type: 'error'
                 });
             }
@@ -429,7 +431,7 @@ class ExpenseItemManager {
             const emptyCell = Utils.dom.createElement('td', {
                 colspan: 6,
                 style: 'text-align: center; padding: 2rem; color: var(--gray-500);'
-            }, '暂无数据');
+            }, 'データがありません');
             emptyRow.appendChild(emptyCell);
             tbody.appendChild(emptyRow);
             return;
@@ -448,14 +450,14 @@ class ExpenseItemManager {
 
             // 分类
             const categoryText = {
-                'transport': '运输费',
-                'storage': '仓储费',
-                'handling': '装卸费',
-                'packaging': '包装费',
-                'insurance': '保险费',
-                'customs': '报关费',
-                'commission': '佣金',
-                'other': '其他费用'
+                'transport': '運送費',
+                'storage': '倉庫料',
+                'handling': '荷役費',
+                'packaging': '包装費',
+                'insurance': '保険料',
+                'customs': '通関料',
+                'commission': '手数料',
+                'other': 'その他費用'
             }[item.category] || item.category;
             const categoryCell = Utils.dom.createElement('td', {}, categoryText);
             row.appendChild(categoryCell);

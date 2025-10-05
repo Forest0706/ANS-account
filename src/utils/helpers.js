@@ -159,7 +159,7 @@ const Utils = {
          */
         required(value, fieldName) {
             if (!value || value.trim() === '') {
-                return `${fieldName}是必填项`;
+                return `${fieldName}は必須項目です`;
             }
             return null;
         },
@@ -173,7 +173,7 @@ const Utils = {
         email(value, fieldName) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (value && !emailRegex.test(value)) {
-                return `${fieldName}格式不正确`;
+                return `${fieldName}の形式が正しくありません`;
             }
             return null;
         },
@@ -187,18 +187,18 @@ const Utils = {
         phone(value, fieldName) {
             const phoneRegex = /^[\d\-\+\s\(\)]+$/;
             if (value && !phoneRegex.test(value)) {
-                return `${fieldName}格式不正确`;
+                return `${fieldName}の形式が正しくありません`;
             }
             return null;
         },
 
         /**
-         * 验证数字
-         * @param {string} value - 要验证的值
-         * @param {string} fieldName - 字段名称
-         * @param {number} min - 最小值
-         * @param {number} max - 最大值
-         * @returns {string|null} 错误消息，如果验证通过返回null
+         * 数値の検証
+         * @param {string} value - 値
+         * @param {string} fieldName - 項目名
+         * @param {number} min - 最小値
+         * @param {number} max - 最大値
+         * @returns {string|null} エラーメッセージ、検証成功時はnull
          */
         number(value, fieldName, min = null, max = null) {
             if (value === '' || value === null || value === undefined) {
@@ -207,27 +207,27 @@ const Utils = {
             
             const num = Number(value);
             if (isNaN(num)) {
-                return `${fieldName}必须是数字`;
+                return `${fieldName}は数値である必要があります`;
             }
             
             if (min !== null && num < min) {
-                return `${fieldName}不能小于${min}`;
+                return `${fieldName}は${min}以上である必要があります`;
             }
             
             if (max !== null && num > max) {
-                return `${fieldName}不能大于${max}`;
+                return `${fieldName}は${max}以下である必要があります`;
             }
             
             return null;
         },
 
         /**
-         * 验证字符串长度
-         * @param {string} value - 要验证的值
-         * @param {string} fieldName - 字段名称
-         * @param {number} min - 最小长度
-         * @param {number} max - 最大长度
-         * @returns {string|null} 错误消息，如果验证通过返回null
+         * 文字列長の検証
+         * @param {string} value - 値
+         * @param {string} fieldName - 項目名
+         * @param {number} min - 最小長
+         * @param {number} max - 最大長
+         * @returns {string|null} エラーメッセージ、検証成功時はnull
          */
         length(value, fieldName, min = null, max = null) {
             if (value === null || value === undefined) {
@@ -237,11 +237,11 @@ const Utils = {
             const str = String(value);
             
             if (min !== null && str.length < min) {
-                return `${fieldName}长度不能少于${min}个字符`;
+                return `${fieldName}は${min}文字以上である必要があります`;
             }
             
             if (max !== null && str.length > max) {
-                return `${fieldName}长度不能超过${max}个字符`;
+                return `${fieldName}は${max}文字以下である必要があります`;
             }
             
             return null;
@@ -260,7 +260,7 @@ const Utils = {
             
             const date = new Date(value);
             if (isNaN(date.getTime())) {
-                return `${fieldName}日期格式不正确`;
+                return `${fieldName}の日付形式が正しくありません`;
             }
             
             return null;

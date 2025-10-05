@@ -3,47 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>物流财务台账管理系统</title>
+    <title>物流財務台帳管理システム</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- 头部导航 -->
+        <!-- ヘッダーナビゲーション -->
         <header class="header">
             <div class="header-content">
                 <h1 class="logo">
                     <i class="fas fa-truck"></i>
-                    物流财务台账管理系统
+                    物流財務台帳管理システム
                 </h1>
                 <nav class="main-nav">
                     <ul class="nav-list">
                         <li><a href="#" data-page="dashboard" class="nav-link active">
-                            <i class="fas fa-tachometer-alt"></i> 仪表盘
+                            <i class="fas fa-tachometer-alt"></i> ダッシュボード
                         </a></li>
                         <li><a href="#" data-page="customers" class="nav-link">
-                            <i class="fas fa-users"></i> 往来单位管理
+                            <i class="fas fa-users"></i> 取引先管理
                         </a></li>
                         <li><a href="#" data-page="expense-items" class="nav-link">
-                            <i class="fas fa-list"></i> 费用项目管理
+                            <i class="fas fa-list"></i> 費用項目管理
                         </a></li>
                         <li><a href="#" data-page="payment-terms" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i> 支付条件管理
+                            <i class="fas fa-calendar-alt"></i> 支払条件管理
                         </a></li>
                         <li><a href="#" data-page="ledger" class="nav-link">
-                            <i class="fas fa-book"></i> 台账管理
+                            <i class="fas fa-book"></i> 台帳管理
                         </a></li>
                         <li><a href="#" data-page="reports" class="nav-link">
-                            <i class="fas fa-chart-bar"></i> 报表输出
+                            <i class="fas fa-chart-bar"></i> 帳票出力
                         </a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
                     <button class="btn btn-secondary" id="backup-btn">
-                        <i class="fas fa-download"></i> 备份
+                        <i class="fas fa-download"></i> バックアップ
                     </button>
                     <button class="btn btn-secondary" id="restore-btn">
-                        <i class="fas fa-upload"></i> 恢复
+                        <i class="fas fa-upload"></i> リストア
                     </button>
                     <input type="file" id="restore-file" accept=".json" style="display: none;">
                 </div>
@@ -55,8 +55,8 @@
             <!-- 仪表盘页面 -->
             <div id="dashboard-page" class="page active">
                 <div class="page-header">
-                    <h2>仪表盘</h2>
-                    <p>系统概览和快速统计</p>
+                    <h2>ダッシュボード</h2>
+                    <p>システム概要と簡易統計</p>
                 </div>
                 <div class="dashboard-stats">
                     <div class="stat-card">
@@ -65,7 +65,7 @@
                         </div>
                         <div class="stat-content">
                             <h3 id="customer-count">0</h3>
-                            <p>往来单位数量</p>
+                            <p>取引先数</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -74,7 +74,7 @@
                         </div>
                         <div class="stat-content">
                             <h3 id="expense-count">0</h3>
-                            <p>费用项目数量</p>
+                            <p>費用項目数</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="stat-content">
                             <h3 id="payment-terms-count">0</h3>
-                            <p>支付条件数量</p>
+                            <p>支払条件数</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -92,7 +92,7 @@
                         </div>
                         <div class="stat-content">
                             <h3 id="ledger-count">0</h3>
-                            <p>台账记录数量</p>
+                            <p>台帳記録数</p>
                         </div>
                     </div>
                 </div>
@@ -101,13 +101,13 @@
             <!-- 往来单位管理页面 -->
             <div id="customers-page" class="page">
                 <div class="page-header">
-                    <h2>往来单位管理</h2>
+                    <h2>取引先管理</h2>
                     <div class="page-actions">
                         <button class="btn btn-primary" id="add-customer-btn">
-                            <i class="fas fa-plus"></i> 新增往来单位
+                            <i class="fas fa-plus"></i> 取引先新規作成
                         </button>
                         <div class="search-box">
-                            <input type="text" id="customer-search" placeholder="搜索往来单位...">
+                            <input type="text" id="customer-search" placeholder="取引先を検索...">
                             <i class="fas fa-search"></i>
                         </div>
                     </div>
@@ -116,10 +116,10 @@
                     <table id="customers-table" class="data-table">
                         <thead>
                             <tr>
-                                <th data-sort="code">代码 <i class="fas fa-sort"></i></th>
+                                <th data-sort="code">コード <i class="fas fa-sort"></i></th>
                                 <th data-sort="name">名称 <i class="fas fa-sort"></i></th>
-                                <th data-sort="type">类型 <i class="fas fa-sort"></i></th>
-                                <th>联系方式</th>
+                                <th data-sort="type">区分 <i class="fas fa-sort"></i></th>
+                                <th>連絡先</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -133,13 +133,13 @@
             <!-- 费用项目管理页面 -->
             <div id="expense-items-page" class="page">
                 <div class="page-header">
-                    <h2>费用项目管理</h2>
+                    <h2>費用項目管理</h2>
                     <div class="page-actions">
                         <button class="btn btn-primary" id="add-expense-item-btn">
-                            <i class="fas fa-plus"></i> 新增费用项目
+                            <i class="fas fa-plus"></i> 費用項目新規作成
                         </button>
                         <div class="search-box">
-                            <input type="text" id="expense-item-search" placeholder="搜索费用项目...">
+                            <input type="text" id="expense-item-search" placeholder="費用項目を検索...">
                             <i class="fas fa-search"></i>
                         </div>
                     </div>
@@ -148,10 +148,10 @@
                     <table id="expense-items-table" class="data-table">
                         <thead>
                             <tr>
-                                <th data-sort="code">代码 <i class="fas fa-sort"></i></th>
+                                <th data-sort="code">コード <i class="fas fa-sort"></i></th>
                                 <th data-sort="name">名称 <i class="fas fa-sort"></i></th>
                                 <th>税区分</th>
-                                <th>支持币种</th>
+                                <th>対応通貨</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -165,10 +165,10 @@
             <!-- 支付条件管理页面 -->
             <div id="payment-terms-page" class="page">
                 <div class="page-header">
-                    <h2>支付条件管理</h2>
+                    <h2>支払条件管理</h2>
                     <div class="page-actions">
                         <button class="btn btn-primary" id="add-payment-term-btn">
-                            <i class="fas fa-plus"></i> 新增支付条件
+                            <i class="fas fa-plus"></i> 支払条件新規作成
                         </button>
                     </div>
                 </div>
@@ -176,9 +176,9 @@
                     <table id="payment-terms-table" class="data-table">
                         <thead>
                             <tr>
-                                <th data-sort="code">代码 <i class="fas fa-sort"></i></th>
+                                <th data-sort="code">コード <i class="fas fa-sort"></i></th>
                                 <th data-sort="name">名称 <i class="fas fa-sort"></i></th>
-                                <th>支付天数</th>
+                                <th>支払日数</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -195,10 +195,10 @@
                     <h2>台账管理</h2>
                     <div class="page-actions">
                         <button class="btn btn-primary" id="add-ledger-entry-btn">
-                            <i class="fas fa-plus"></i> 新增台账记录
+                            <i class="fas fa-plus"></i> 台帳記録新規作成
                         </button>
                         <button class="btn btn-secondary" id="export-pdf-btn">
-                            <i class="fas fa-file-pdf"></i> 导出PDF
+                            <i class="fas fa-file-pdf"></i> PDF出力
                         </button>
                     </div>
                 </div>
@@ -206,11 +206,11 @@
                     <table id="ledger-table" class="data-table">
                         <thead>
                             <tr>
-                                <th data-sort="date">日期 <i class="fas fa-sort"></i></th>
-                                <th data-sort="customer">往来单位 <i class="fas fa-sort"></i></th>
-                                <th data-sort="expense-item">费用项目 <i class="fas fa-sort"></i></th>
-                                <th>金额</th>
-                                <th>状态</th>
+                                <th data-sort="date">日付 <i class="fas fa-sort"></i></th>
+                                <th data-sort="customer">取引先 <i class="fas fa-sort"></i></th>
+                                <th data-sort="expense-item">費用項目 <i class="fas fa-sort"></i></th>
+                                <th>金額</th>
+                                <th>状態</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -224,39 +224,39 @@
             <!-- 报表输出页面 -->
             <div id="reports-page" class="page">
                 <div class="page-header">
-                    <h2>报表输出</h2>
-                    <p>生成各种财务报表</p>
+                    <h2>帳票出力</h2>
+                    <p>各種財務帳票の生成</p>
                 </div>
                 <div class="reports-grid">
                     <div class="report-card">
-                        <h3>月度收支报表</h3>
-                        <p>按月份统计收支情况</p>
-                        <button class="btn btn-primary">生成报表</button>
+                        <h3>月次収支帳票</h3>
+                        <p>月別の収支状況を集計</p>
+                        <button class="btn btn-primary">帳票を生成</button>
                     </div>
                     <div class="report-card">
-                        <h3>往来单位对账单</h3>
-                        <p>按往来单位统计交易记录</p>
-                        <button class="btn btn-primary">生成报表</button>
+                        <h3>取引先別対帳表</h3>
+                        <p>取引先別に取引記録を集計</p>
+                        <button class="btn btn-primary">帳票を生成</button>
                     </div>
                     <div class="report-card">
-                        <h3>费用项目分析</h3>
-                        <p>按费用项目分类统计</p>
-                        <button class="btn btn-primary">生成报表</button>
+                        <h3>費用項目分析</h3>
+                        <p>費用項目別に分類集計</p>
+                        <button class="btn btn-primary">帳票を生成</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- 加载状态 -->
+    <!-- 読み込み状態 -->
     <div id="loading" class="loading-overlay">
         <div class="loading-spinner">
             <i class="fas fa-spinner fa-spin"></i>
-            <p>正在加载...</p>
+            <p>読み込み中...</p>
         </div>
     </div>
 
-    <!-- 模态框容器 -->
+    <!-- モーダルコンテナ -->
     <div id="modal-container"></div>
 
     <!-- JavaScript模块 -->
@@ -269,5 +269,8 @@
     <script src="src/modules/ledger.js"></script>
     <script src="src/modules/dashboard.js"></script>
     <script src="src/app.js"></script>
+
+    <!-- 自动化测试脚本 -->
+    <script src="scripts/tests/phase1.js"></script>
 </body>
 </html>

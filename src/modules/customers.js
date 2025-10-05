@@ -72,7 +72,7 @@ class CustomerManager {
      * 显示新增模态框
      */
     showAddModal() {
-        const modal = this.createCustomerModal('新增往来单位', {});
+        const modal = this.createCustomerModal('取引先新規作成', {});
         Components.showModal(modal);
     }
 
@@ -80,7 +80,7 @@ class CustomerManager {
      * 显示编辑模态框
      */
     showEditModal(customer) {
-        const modal = this.createCustomerModal('编辑往来单位', customer);
+        const modal = this.createCustomerModal('取引先編集', customer);
         Components.showModal(modal);
     }
 
@@ -102,7 +102,7 @@ class CustomerManager {
         // 代码（只读）
         const codeInput = Components.createFormInput({
             name: 'code',
-            label: '代码',
+            label: 'コード',
             value: newCode,
             required: true,
             disabled: true
@@ -111,21 +111,21 @@ class CustomerManager {
         // 名称
         const nameInput = Components.createFormInput({
             name: 'name',
-            label: '名称',
+            label: '会社名',
             value: customer.name || '',
-            placeholder: '请输入往来单位名称',
+            placeholder: '取引先名を入力してください',
             required: true
         });
 
         // 类型
         const typeSelect = Components.createFormSelect({
             name: 'type',
-            label: '类型',
+            label: '取引先区分',
             value: customer.type || 'customer',
             options: [
-                { value: 'customer', text: '客户' },
-                { value: 'supplier', text: '供应商' },
-                { value: 'both', text: '客户/供应商' }
+                { value: 'customer', text: '顧客' },
+                { value: 'supplier', text: '仕入先' },
+                { value: 'both', text: '顧客/仕入先' }
             ],
             required: true
         });
@@ -133,51 +133,51 @@ class CustomerManager {
         // 联系人
         const contactInput = Components.createFormInput({
             name: 'contact_person',
-            label: '联系人',
+            label: '担当者',
             value: customer.contact_person || '',
-            placeholder: '请输入联系人姓名'
+            placeholder: '担当者名を入力してください'
         });
 
         // 电话
         const phoneInput = Components.createFormInput({
             name: 'phone',
-            label: '电话',
+            label: '電話番号',
             value: customer.phone || '',
-            placeholder: '请输入联系电话'
+            placeholder: '電話番号を入力してください'
         });
 
         // 邮箱
         const emailInput = Components.createFormInput({
             name: 'email',
-            label: '邮箱',
+            label: 'メール',
             value: customer.email || '',
-            placeholder: '请输入邮箱地址'
+            placeholder: 'メールアドレスを入力してください'
         });
 
         // 地址
         const addressInput = Components.createFormTextarea({
             name: 'address',
-            label: '地址',
+            label: '住所',
             value: customer.address || '',
-            placeholder: '请输入详细地址'
+            placeholder: '住所を入力してください'
         });
 
         // 备注
         const notesInput = Components.createFormTextarea({
             name: 'notes',
-            label: '备注',
+            label: '備考',
             value: customer.notes || '',
-            placeholder: '请输入备注信息'
+            placeholder: '備考を入力してください'
         });
 
         // 状态
         const statusSelect = Components.createFormSelect({
             name: 'status',
-            label: '状态',
+            label: '状態',
             value: customer.status || 'active',
             options: [
-                { value: 'active', text: '启用' },
-                { value: 'inactive', text: '停用' }
+                { value: 'active', text: '有効' },
+                { value: 'inactive', text: '無効' }
             ]
         });
 
@@ -196,7 +196,7 @@ class CustomerManager {
                 type: 'button',
                 className: 'btn btn-secondary',
                 onclick: () => Components.closeModal(modal)
-            }, '取消'),
+            }, 'キャンセル'),
             Utils.dom.createElement('button', {
                 type: 'submit',
                 className: 'btn btn-primary',
@@ -248,7 +248,7 @@ class CustomerManager {
 
         if (result) {
             Components.createToast({
-                message: isEdit ? '往来单位更新成功！' : '往来单位添加成功！',
+                message: isEdit ? '取引先を更新しました！' : '取引先を追加しました！',
                 type: 'success'
             });
             
@@ -257,7 +257,7 @@ class CustomerManager {
             Components.closeModal(document.querySelector('.modal.active'));
         } else {
             Components.createToast({
-                message: '操作失败，请重试',
+                message: '操作に失敗しました。再試行してください',
                 type: 'error'
             });
         }
@@ -297,9 +297,9 @@ class CustomerManager {
         if (!customer) return;
 
         const confirmed = await Components.createConfirmDialog({
-            title: '删除确认',
-            message: `确定要删除往来单位 "${customer.name}" 吗？`,
-            confirmText: '删除',
+            title: '削除確認',
+            message: `取引先 "${customer.name}" を削除してもよろしいですか？`,
+            confirmText: '削除',
             confirmClass: 'btn-danger'
         });
 
@@ -311,7 +311,7 @@ class CustomerManager {
 
             if (success) {
                 Components.createToast({
-                    message: '往来单位删除成功！',
+                    message: '取引先を削除しました！',
                     type: 'success'
                 });
                 
@@ -319,7 +319,7 @@ class CustomerManager {
                 this.filterAndSort();
             } else {
                 Components.createToast({
-                    message: '删除失败，请重试',
+                    message: '削除に失敗しました。再試行してください',
                     type: 'error'
                 });
             }
@@ -368,7 +368,7 @@ class CustomerManager {
             const emptyCell = Utils.dom.createElement('td', {
                 colspan: 5,
                 style: 'text-align: center; padding: 2rem; color: var(--gray-500);'
-            }, '暂无数据');
+            }, 'データがありません');
             emptyRow.appendChild(emptyCell);
             tbody.appendChild(emptyRow);
             return;
@@ -387,9 +387,9 @@ class CustomerManager {
 
             // 类型
             const typeText = {
-                'customer': '客户',
-                'supplier': '供应商',
-                'both': '客户/供应商'
+                'customer': '顧客',
+                'supplier': '仕入先',
+                'both': '顧客/仕入先'
             }[customer.type] || customer.type;
             const typeCell = Utils.dom.createElement('td', {}, typeText);
             row.appendChild(typeCell);

@@ -280,10 +280,10 @@ class BaseComponents {
      */
     createConfirmDialog(options = {}) {
         const {
-            title = '确认操作',
-            message = '您确定要执行此操作吗？',
-            confirmText = '确定',
-            cancelText = '取消',
+            title = '操作確認',
+            message = 'この操作を実行してもよろしいですか？',
+            confirmText = '確定',
+            cancelText = 'キャンセル',
             confirmClass = 'btn-danger',
             cancelClass = 'btn-secondary'
         } = options;
@@ -477,10 +477,10 @@ class BaseComponents {
             className: 'btn btn-sm btn-secondary',
             onclick: () => currentPage > 1 && onPageChange && onPageChange(currentPage - 1),
             disabled: currentPage <= 1
-        }, '上一页');
+        }, '前へ');
         pagination.appendChild(prevButton);
 
-        // 页码
+        // ページ番号
         for (let i = 1; i <= totalPages; i++) {
             if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
                 const pageButton = Utils.dom.createElement('button', {
@@ -496,18 +496,18 @@ class BaseComponents {
             }
         }
 
-        // 下一页
+        // 次へ
         const nextButton = Utils.dom.createElement('button', {
             className: 'btn btn-sm btn-secondary',
             onclick: () => currentPage < totalPages && onPageChange && onPageChange(currentPage + 1),
             disabled: currentPage >= totalPages
-        }, '下一页');
+        }, '次へ');
         pagination.appendChild(nextButton);
 
-        // 统计信息
+        // 統計情報
         const info = Utils.dom.createElement('span', {
             style: 'margin-left: 1rem; color: var(--gray-600); font-size: var(--text-sm);'
-        }, `共 ${totalItems} 条记录`);
+        }, `全 ${totalItems} 件`);
         pagination.appendChild(info);
 
         return pagination;

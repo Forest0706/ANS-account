@@ -22,8 +22,8 @@ class App {
                 this.initializeApp();
             }
         } catch (error) {
-            console.error('应用初始化失败:', error);
-            this.showError('应用初始化失败，请刷新页面重试');
+            console.error('アプリケーション初期化に失敗しました:', error);
+            this.showError('アプリケーション初期化に失敗しました。ページを再読み込みしてください');
         }
     }
 
@@ -39,6 +39,8 @@ class App {
             if (!window.storage) {
                 window.storage = new StorageManager();
             }
+            // 绑定到实例，便于统一访问
+            this.storage = window.storage;
 
             // 初始化基础组件
             if (!window.Components) {
@@ -64,8 +66,8 @@ class App {
 
             console.log('应用初始化完成');
         } catch (error) {
-            console.error('应用初始化失败:', error);
-            this.showError('应用初始化失败，请刷新页面重试');
+            console.error('アプリケーション初期化に失敗しました:', error);
+            this.showError('アプリケーション初期化に失敗しました。ページを再読み込みしてください');
         }
     }
 
@@ -73,11 +75,11 @@ class App {
      * 绑定导航事件
      */
     bindNavigationEvents() {
-        // 主导航
-        document.querySelectorAll('.nav-link[data-module]').forEach(link => {
+        // 主导航（统一使用 data-page）
+        document.querySelectorAll('.nav-link[data-page]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const module = link.dataset.module;
+                const module = link.dataset.page;
                 this.showModule(module);
             });
         });
@@ -114,24 +116,24 @@ class App {
      * 显示指定模块
      */
     showModule(moduleName) {
-        // 隐藏所有模块
-        document.querySelectorAll('.module-content').forEach(module => {
-            module.classList.remove('active');
+        // 隐藏所有页面（统一使用 .page）
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
         });
 
-        // 移除导航激活状态
-        document.querySelectorAll('.nav-link[data-module]').forEach(link => {
+        // 移除导航激活状态（统一使用 data-page）
+        document.querySelectorAll('.nav-link[data-page]').forEach(link => {
             link.classList.remove('active');
         });
 
-        // 显示目标模块
-        const targetModule = document.getElementById(`${moduleName}-module`);
-        if (targetModule) {
-            targetModule.classList.add('active');
+        // 显示目标页面（id: <module>-page）
+        const targetPage = document.getElementById(`${moduleName}-page`);
+        if (targetPage) {
+            targetPage.classList.add('active');
             this.currentModule = moduleName;
 
             // 激活对应导航
-            const targetNav = document.querySelector(`[data-module="${moduleName}"]`);
+            const targetNav = document.querySelector(`[data-page="${moduleName}"]`);
             if (targetNav) {
                 targetNav.classList.add('active');
             }
@@ -174,20 +176,20 @@ class App {
      */
     updateDashboard() {
         try {
-            const stats = this.storage.getStatistics();
+            const stats = this.storage.getStats();
             
-            // 更新统计数据
-            this.updateStatCard('total-customers', stats.totalCustomers);
-            this.updateStatCard('total-expense-items', stats.totalExpenseItems);
-            this.updateStatCard('total-ledger-entries', stats.totalLedgerEntries);
-            this.updateStatCard('total-amount', Utils.number.format(stats.totalAmount));
+            // 更新统计数据（与 index.html 的ID一致）
+            this.updateStatCard('customer-count', stats.customers);
+            this.updateStatCard('expense-count', stats.expense_items);
+            this.updateStatCard('payment-terms-count', stats.payment_terms);
+            this.updateStatCard('ledger-count', stats.ledger_entries);
 
             // 更新最近活动
             this.updateRecentActivity();
 
-            console.log('仪表板数据已更新');
+            console.log('ダッシュボードのデータを更新しました');
         } catch (error) {
-            console.error('更新仪表板失败:', error);
+            console.error('ダッシュボードの更新に失敗しました:', error);
         }
     }
 
@@ -195,17 +197,15 @@ class App {
      * 更新统计卡片
      */
     updateStatCard(cardId, value) {
-        const card = document.getElementById(cardId);
-        if (card) {
-            const valueElement = card.querySelector('.stat-value');
-            if (valueElement) {
-                // 添加动画效果
-                valueElement.style.opacity = '0';
-                setTimeout(() => {
-                    valueElement.textContent = value;
-                    valueElement.style.opacity = '1';
-                }, 150);
-            }
+        const el = document.getElementById(cardId);
+        if (el) {
+            // 兼容存在 .stat-value 子元素或直接设置到当前元素
+            const valueElement = el.querySelector && el.querySelector('.stat-value') ? el.querySelector('.stat-value') : el;
+            valueElement.style.opacity = '0';
+            setTimeout(() => {
+                valueElement.textContent = value;
+                valueElement.style.opacity = '1';
+            }, 150);
         }
     }
 
@@ -291,16 +291,16 @@ class App {
      */
     updatePageTitle(moduleName) {
         const titles = {
-            'dashboard': '仪表板',
-            'customers': '往来单位管理',
-            'expense-items': '费用项目管理',
-            'payment-terms': '付款条件管理',
-            'ledger': '台账管理',
-            'reports': '报表输出'
+            'dashboard': 'ダッシュボード',
+            'customers': '取引先管理',
+            'expense-items': '費用項目管理',
+            'payment-terms': '支払条件管理',
+            'ledger': '台帳管理',
+            'reports': 'レポート出力'
         };
 
-        const title = titles[moduleName] || '物流财务台账管理系统';
-        document.title = `${title} - 物流财务台账管理系统`;
+        const title = titles[moduleName] || '物流財務台帳管理システム';
+        document.title = `${title} - 物流財務台帳管理システム`;
     }
 
     /**
