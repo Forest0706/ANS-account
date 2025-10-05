@@ -1,0 +1,55 @@
+{
+  "name": "ans-logistics-finance-system",
+  "version": "1.0.0",
+  "description": "物流財務台帳管理システム - 物流货物代理业财务台账管理系统",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 8080 -o",
+    "start": "npx http-server -p 8080 -o",
+    "build": "echo 'Building project...' && npm run validate",
+    "validate": "echo 'Validating code...' && npm run lint",
+    "lint": "echo 'Running linter...' && echo 'No linting configured'",
+    "test": "echo 'Running tests...' && echo 'No tests configured'",
+    "backup": "node scripts/backup-localStorage.js",
+    "restore": "node scripts/restore-localStorage.js",
+    "export-data": "node scripts/export-data.js",
+    "import-data": "node scripts/import-data.js"
+  },
+  "keywords": [
+    "logistics",
+    "finance",
+    "accounting",
+    "invoice",
+    "pdf",
+    "japanese",
+    "supply-chain",
+    "transportation"
+  ],
+  "author": "ANS Supply Chain Co., Ltd.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/ans-logistics-finance-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/ans-logistics-finance-system/issues"
+  },
+  "homepage": "https://github.com/your-username/ans-logistics-finance-system#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "jspdf": "^2.5.1",
+    "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.10.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
