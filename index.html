@@ -3,138 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>物流財務台帳管理システム</title>
+    <title>物流财务台账管理系统</title>
     <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div id="app">
+    <div class="app-container">
+        <!-- 头部导航 -->
         <header class="header">
-            <div class="container">
-                <h1 class="logo">物流財務台帳管理システム</h1>
-                <nav class="nav">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-truck"></i>
+                    物流财务台账管理系统
+                </h1>
+                <nav class="main-nav">
                     <ul class="nav-list">
-                        <li class="nav-item"><a href="#dashboard" class="nav-link active">ダッシュボード</a></li>
-                        <li class="nav-item"><a href="#master-data" class="nav-link">マスタ管理</a></li>
-                        <li class="nav-item"><a href="#ledger" class="nav-link">台帳管理</a></li>
-                        <li class="nav-item"><a href="#reports" class="nav-link">レポート</a></li>
-                        <li class="nav-item"><a href="#settings" class="nav-link">設定</a></li>
+                        <li><a href="#" data-page="dashboard" class="nav-link active">
+                            <i class="fas fa-tachometer-alt"></i> 仪表盘
+                        </a></li>
+                        <li><a href="#" data-page="customers" class="nav-link">
+                            <i class="fas fa-users"></i> 往来单位管理
+                        </a></li>
+                        <li><a href="#" data-page="expense-items" class="nav-link">
+                            <i class="fas fa-list"></i> 费用项目管理
+                        </a></li>
+                        <li><a href="#" data-page="payment-terms" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i> 支付条件管理
+                        </a></li>
+                        <li><a href="#" data-page="ledger" class="nav-link">
+                            <i class="fas fa-book"></i> 台账管理
+                        </a></li>
+                        <li><a href="#" data-page="reports" class="nav-link">
+                            <i class="fas fa-chart-bar"></i> 报表输出
+                        </a></li>
                     </ul>
                 </nav>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="backup-btn">
+                        <i class="fas fa-download"></i> 备份
+                    </button>
+                    <button class="btn btn-secondary" id="restore-btn">
+                        <i class="fas fa-upload"></i> 恢复
+                    </button>
+                    <input type="file" id="restore-file" accept=".json" style="display: none;">
+                </div>
             </div>
         </header>
 
-        <main class="main">
-            <div class="container">
-                <div id="dashboard" class="page active">
-                    <h2>ダッシュボード</h2>
-                    <div class="dashboard-stats">
-                        <div class="stat-card">
-                            <h3>総台帳数</h3>
-                            <p class="stat-number" id="total-ledgers">0</p>
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 仪表盘页面 -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2>仪表盘</h2>
+                    <p>系统概览和快速统计</p>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
                         </div>
-                        <div class="stat-card">
-                            <h3>未処理請求</h3>
-                            <p class="stat-number" id="pending-invoices">0</p>
+                        <div class="stat-content">
+                            <h3 id="customer-count">0</h3>
+                            <p>往来单位数量</p>
                         </div>
-                        <div class="stat-card">
-                            <h3>今月の粗利</h3>
-                            <p class="stat-number" id="monthly-profit">¥0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="expense-count">0</h3>
+                            <p>费用项目数量</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="payment-terms-count">0</h3>
+                            <p>支付条件数量</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="ledger-count">0</h3>
+                            <p>台账记录数量</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="master-data" class="page">
-                    <h2>マスタデータ管理</h2>
-                    <div class="master-tabs">
-                        <button class="tab-btn active" data-tab="customers">取引先マスタ</button>
-                        <button class="tab-btn" data-tab="expense-items">費用項目マスタ</button>
-                        <button class="tab-btn" data-tab="payment-terms">支払条件マスタ</button>
-                    </div>
-                    <div id="master-content" class="master-content">
-                        <!-- マスタデータ内容将在这里动态加载 -->
-                    </div>
-                </div>
-
-                <div id="ledger" class="page">
-                    <h2>台帳管理</h2>
-                    <div class="ledger-controls">
-                        <button class="btn btn-primary" id="new-ledger-btn">新規台帳作成</button>
+            <!-- 往来单位管理页面 -->
+            <div id="customers-page" class="page">
+                <div class="page-header">
+                    <h2>往来单位管理</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="add-customer-btn">
+                            <i class="fas fa-plus"></i> 新增往来单位
+                        </button>
                         <div class="search-box">
-                            <input type="text" id="ledger-search" placeholder="台帳番号・顧客名・B/L番号で検索">
-                            <button class="btn btn-secondary">検索</button>
+                            <input type="text" id="customer-search" placeholder="搜索往来单位...">
+                            <i class="fas fa-search"></i>
                         </div>
                     </div>
-                    <div id="ledger-list" class="ledger-list">
-                        <!-- 台帳列表将在这里动态加载 -->
+                </div>
+                <div class="table-container">
+                    <table id="customers-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="code">代码 <i class="fas fa-sort"></i></th>
+                                <th data-sort="name">名称 <i class="fas fa-sort"></i></th>
+                                <th data-sort="type">类型 <i class="fas fa-sort"></i></th>
+                                <th>联系方式</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-tbody">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 费用项目管理页面 -->
+            <div id="expense-items-page" class="page">
+                <div class="page-header">
+                    <h2>费用项目管理</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="add-expense-item-btn">
+                            <i class="fas fa-plus"></i> 新增费用项目
+                        </button>
+                        <div class="search-box">
+                            <input type="text" id="expense-item-search" placeholder="搜索费用项目...">
+                            <i class="fas fa-search"></i>
+                        </div>
                     </div>
                 </div>
+                <div class="table-container">
+                    <table id="expense-items-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="code">代码 <i class="fas fa-sort"></i></th>
+                                <th data-sort="name">名称 <i class="fas fa-sort"></i></th>
+                                <th>税区分</th>
+                                <th>支持币种</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expense-items-tbody">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                <div id="reports" class="page">
-                    <h2>レポート</h2>
-                    <div class="report-controls">
-                        <select id="report-type">
-                            <option value="monthly">月次レポート</option>
-                            <option value="quarterly">四半期レポート</option>
-                            <option value="yearly">年次レポート</option>
-                        </select>
-                        <input type="month" id="report-date">
-                        <button class="btn btn-primary" id="generate-report-btn">レポート生成</button>
-                    </div>
-                    <div id="report-content" class="report-content">
-                        <!-- レポート内容将在这里显示 -->
+            <!-- 支付条件管理页面 -->
+            <div id="payment-terms-page" class="page">
+                <div class="page-header">
+                    <h2>支付条件管理</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="add-payment-term-btn">
+                            <i class="fas fa-plus"></i> 新增支付条件
+                        </button>
                     </div>
                 </div>
+                <div class="table-container">
+                    <table id="payment-terms-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="code">代码 <i class="fas fa-sort"></i></th>
+                                <th data-sort="name">名称 <i class="fas fa-sort"></i></th>
+                                <th>支付天数</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payment-terms-tbody">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                <div id="settings" class="page">
-                    <h2>システム設定</h2>
-                    <div class="settings-tabs">
-                        <button class="tab-btn active" data-tab="company">会社情報</button>
-                        <button class="tab-btn" data-tab="system">システム設定</button>
-                        <button class="tab-btn" data-tab="backup">バックアップ</button>
+            <!-- 台账管理页面 -->
+            <div id="ledger-page" class="page">
+                <div class="page-header">
+                    <h2>台账管理</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="add-ledger-entry-btn">
+                            <i class="fas fa-plus"></i> 新增台账记录
+                        </button>
+                        <button class="btn btn-secondary" id="export-pdf-btn">
+                            <i class="fas fa-file-pdf"></i> 导出PDF
+                        </button>
                     </div>
-                    <div id="settings-content" class="settings-content">
-                        <!-- 設定内容将在这里动态加载 -->
+                </div>
+                <div class="table-container">
+                    <table id="ledger-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="date">日期 <i class="fas fa-sort"></i></th>
+                                <th data-sort="customer">往来单位 <i class="fas fa-sort"></i></th>
+                                <th data-sort="expense-item">费用项目 <i class="fas fa-sort"></i></th>
+                                <th>金额</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-tbody">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 报表输出页面 -->
+            <div id="reports-page" class="page">
+                <div class="page-header">
+                    <h2>报表输出</h2>
+                    <p>生成各种财务报表</p>
+                </div>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>月度收支报表</h3>
+                        <p>按月份统计收支情况</p>
+                        <button class="btn btn-primary">生成报表</button>
+                    </div>
+                    <div class="report-card">
+                        <h3>往来单位对账单</h3>
+                        <p>按往来单位统计交易记录</p>
+                        <button class="btn btn-primary">生成报表</button>
+                    </div>
+                    <div class="report-card">
+                        <h3>费用项目分析</h3>
+                        <p>按费用项目分类统计</p>
+                        <button class="btn btn-primary">生成报表</button>
                     </div>
                 </div>
             </div>
         </main>
-
-        <footer class="footer">
-            <div class="container">
-                <p>&copy; 2024 アンササプライチェーン株式会社. All rights reserved.</p>
-            </div>
-        </footer>
     </div>
 
-    <!-- モーダルウィンドウ -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modal-body">
-                <!-- モーダル内容将在这里动态加载 -->
-            </div>
+    <!-- 加载状态 -->
+    <div id="loading" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>正在加载...</p>
         </div>
     </div>
 
-    <!-- スクリプト -->
+    <!-- 模态框容器 -->
+    <div id="modal-container"></div>
+
+    <!-- JavaScript模块 -->
     <script src="src/utils/storage.js"></script>
-    <script src="src/utils/calculations.js"></script>
-    <script src="src/utils/pdf-generator.js"></script>
-    <script src="src/components/navigation.js"></script>
-    <script src="src/components/modal.js"></script>
-    <script src="src/components/forms.js"></script>
-    <script src="src/components/tables.js"></script>
-    <script src="src/data/master-data.js"></script>
-    <script src="src/data/ledger-data.js"></script>
-    <script src="src/pages/dashboard.js"></script>
-    <script src="src/pages/master-data.js"></script>
-    <script src="src/pages/ledger.js"></script>
-    <script src="src/pages/reports.js"></script>
-    <script src="src/pages/settings.js"></script>
+    <script src="src/utils/helpers.js"></script>
+    <script src="src/components/base.js"></script>
+    <script src="src/modules/customers.js"></script>
+    <script src="src/modules/expense-items.js"></script>
+    <script src="src/modules/payment-terms.js"></script>
+    <script src="src/modules/ledger.js"></script>
+    <script src="src/modules/dashboard.js"></script>
     <script src="src/app.js"></script>
 </body>
 </html>
